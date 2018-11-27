@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <logger name="org.springframework.web" level="INFO"/>
+    <logger name="org.springboot.sample" level="TRACE"/>
+
+    <!-- 开发、测试环境 -->
+    <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
+    <property name="LOG_HOME" value="/logs/xiaobai-up"/>
+
+    <logger name="org.springframework.web" level="INFO"/>
+    <logger name="org.springboot.sample" level="INFO"/>
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%5level] [%15.15thread] [%-40.40logger{50} - %3L] : %msg%n</pattern>
+        </encoder>
+    </appender>
+    <logger name="com.xiaobai" additivity="false" level="DEBUG">
+        <appender-ref ref="stdout"/>
+    </logger>
+
+    <!--Debug日志-->
+    <appender name="debug" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/%d{yyyy-MM-dd}/com.xiaobai-deb.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%5level] [%15.15thread] [%-40.40logger{50} - %3L] : %msg%n</pattern>
+        </encoder>
+    </appender>
+    <logger name="com.xiaobai.system" additivity="false"
+            level="DEBUG"> <!--当additivity="false"时，root中的配置就失灵了，不遵循缺省的继承机制-->
+        <appender-ref ref="debug"/>
+    </logger>
+
+    <!--Access日志-->
+    <!--<appender name="access" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/%d{yyyy-MM-dd}/com.xiaobai-acc.syslog</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%5level] [%15.15thread] [%-40.40logger{50} - %3L] : %msg%n</pattern>
+        </encoder>
+    </appender>
+    <logger name="com.xiaobai.common.aop" additivity="false" level="INFO">
+        <appender-ref ref="access"/>
+    </logger>-->
+
+    <!--Error日志-->
+    <appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/%d{yyyy-MM-dd}/com.xiaobai-err.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%5level] [%15.15thread] [%-40.40logger{50} - %3L] : %msg%n</pattern>
+        </encoder>
+    </appender>
+    <logger name="com.xiaobai" additivity="false" level="ERROR">
+        <appender-ref ref="error"/>
+    </logger>
+
+    <!--系统日志-->
+    <appender name="sys" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/%d{yyyy-MM-dd}/com.xiaobai-sys.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{HH:mm:ss.SSS} [%5level] [%15.15thread] [%-40.40logger{50} - %3L] : %msg%n</pattern>
+        </encoder>
+    </appender>
+    <root level="INFO">
+        <appender-ref ref="sys"/>
+    </root>
+
+
+</configuration>
